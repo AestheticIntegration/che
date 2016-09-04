@@ -41,7 +41,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 @Singleton
 public class Auth0OAuthAuthenticator extends OAuthAuthenticator {
 
-    private String auth0Domain; // this is custom for each application
+    private String auth0Domain; // This is specific to each application
 
     @Inject
     public Auth0OAuthAuthenticator( @Nullable @Named("oauth.auth0.clientid") String clientId,
@@ -67,25 +67,15 @@ public class Auth0OAuthAuthenticator extends OAuthAuthenticator {
     public User getUser(OAuthToken accessToken) throws OAuthAuthenticationException {
         Auth0User user = getJson("https://" + this.getDomain() + "/userinfo/?access_token=" + accessToken.getToken(), Auth0User.class);
 
-        if (user.verifiedEmail() == false) {
+        if (user.verified_email() == false) {
             throw new OAuthAuthenticationException(
                     "Sorry, we failed to find any verified emails associated with your Auth0 account." +
                     "Please, verify at least one email in your Auth0 account and try to connect with Auth0 again.");
 
         }
 
-        user.setEmail(verifiedEmail.getEmail());
-        final String email = user.getEmail();
-
-        try {
-            new InternetAddress(email).validate();
-        } catch (AddressException e) {
-            throw new OAuthAuthenticationException(e.getMessage());
-        }
-
         return user;
     }
-
 
     @Override
     public final String getOAuthProvider() {

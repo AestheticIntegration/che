@@ -51,6 +51,11 @@ public class Auth0User implements User {
 
     public void setOrganization(String organization) {
         this.organization = organization;
+    }
+
+    public boolean email_verified () {
+        return false;
+    }
 
     @Override
     public String getEmail() {
