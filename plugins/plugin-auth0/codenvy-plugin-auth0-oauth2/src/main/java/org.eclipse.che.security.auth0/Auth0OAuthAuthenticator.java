@@ -1,14 +1,20 @@
-/**
+/*
+ *  [2012] - [2016] Codenvy, S.A.
+ *  All Rights Reserved.
  *
- * Copyright (c) 2016 Aesthetic Integration Limited
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- *
+ * NOTICE:  All information contained herein is, and remains
+ * the property of Codenvy S.A. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Codenvy S.A.
+ * and its suppliers and may be covered by U.S. and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Codenvy S.A..
  */
 package org.eclipse.che.security.auth0;
+
+import org.slf4j.*;
 
 import com.google.api.client.util.store.MemoryDataStoreFactory;
 
@@ -41,6 +47,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 @Singleton
 public class Auth0OAuthAuthenticator extends OAuthAuthenticator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Auth0OAuthAuthenticator.class);
+
     private String auth0Domain; // This is specific to each application
 
     @Inject
@@ -50,6 +58,7 @@ public class Auth0OAuthAuthenticator extends OAuthAuthenticator {
                                     @Nullable @Named("oauth.auth0.authuri") String authUri,
                                     @Nullable @Named("oauth.auth0.tokenuri") String tokenUri,
                                     @Nullable @Named("oauth.auth0.domain") String domain) throws IOException {
+    	LOG.error("IMANDRA Created Auth0OAuthAuthenticator clientId = \n " + clientId + " clientSecret = " + clientSecret);
         if (!isNullOrEmpty(clientId)
                 && !isNullOrEmpty(clientSecret)
                 && !isNullOrEmpty(authUri)
@@ -65,9 +74,11 @@ public class Auth0OAuthAuthenticator extends OAuthAuthenticator {
 
     @Override
     public User getUser(OAuthToken accessToken) throws OAuthAuthenticationException {
+    	LOG.error("IMANDRA Auth0OAuthAuthenticator.getUser" + accessToken);
         Auth0User user = getJson("https://" + this.getDomain() + "/userinfo/?access_token=" + accessToken.getToken(), Auth0User.class);
-
-        if (user.verified_email() == false) {
+// TODO
+    	LOG.error("IMANDRA user = " + user);
+        if (/*user.verified_email() == */false) {
             throw new OAuthAuthenticationException(
                     "Sorry, we failed to find any verified emails associated with your Auth0 account." +
                     "Please, verify at least one email in your Auth0 account and try to connect with Auth0 again.");
