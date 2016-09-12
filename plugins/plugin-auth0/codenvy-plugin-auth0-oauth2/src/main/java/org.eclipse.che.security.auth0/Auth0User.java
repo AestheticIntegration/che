@@ -32,54 +32,51 @@ public class Auth0User implements User {
     private String organization;
     private String email;
 
-    private String userid;
-
+    private String user_id;
     @Override
     public final String getId() {
-        return userid;
+        return user_id;
     }
-
     @Override
     public final void setId(String id) {
-        userid = id;
+        user_id = id;
     }
-
+    public void setUser_id (String id) {
+        user_id = id;
+    }
     @Override
     public String getName() {
         return firstName;
     }
-
     @Override
     public void setName(String name) {
         this.firstName = name;
     }
-
     public String getOrganization() {
         return organization;
     }
-
     public void setOrganization(String organization) {
         this.organization = organization;
     }
-
     public boolean email_verified () {
         return false;
     }
-
     @Override
     public String getEmail() {
         return email;
     }
-
     @Override
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
+    
+    
     @Override
     public String toString() {
         return "Auth0User{" +
                 "id='" + getId() + '\'' +
+                "user_id='" + user_id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
